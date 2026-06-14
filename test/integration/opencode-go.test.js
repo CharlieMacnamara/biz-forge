@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { homedir } from 'os';
 import { join } from 'path';
 import { readFileSync } from 'fs';
@@ -55,7 +55,24 @@ async function callLLM(prompt, options = {}) {
   return res.json();
 }
 
+let apiAvailable = false;
+
 describe('OpenCode Go — deepseek-v4-flash', () => {
+  beforeAll(async () => {
+    try {
+      const key = getApiKey();
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model: MODEL, messages: [{ role: 'user', content: 'ping' }], temperature: 0, max_tokens: 16 }),
+        signal: AbortSignal.timeout(10000),
+      });
+      apiAvailable = res.ok;
+    } catch {
+      apiAvailable = false;
+    }
+  });
+
   it('resolves API key from opencode auth.json', () => {
     const key = getApiKey();
     expect(key).toBeTruthy();
@@ -63,7 +80,7 @@ describe('OpenCode Go — deepseek-v4-flash', () => {
     expect(key.startsWith('sk-')).toBe(true);
   });
 
-  it('returns valid chat completion format', async () => {
+  it('returns valid chat completion format', { skip: !apiAvailable }, async () => {
     const data = await callLLM('say hello');
     expect(data).toHaveProperty('id');
     expect(data.object).toBe('chat.completion');
@@ -74,30 +91,28 @@ describe('OpenCode Go — deepseek-v4-flash', () => {
     expect(data.usage.total_tokens).toBeGreaterThan(0);
   });
 
-  it('returns visible content when given enough tokens', async () => {
+  it('returns visible content when given enough tokens', { skip: !apiAvailable }, async () => {
     const data = await callLLM('respond with only the word hello');
     const content = (data.choices[0].message.content || '').trim();
     expect(content.length).toBeGreaterThan(0);
     expect(content.toLowerCase()).toContain('hello');
   });
 
-  it('emits reasoning_content (DeepSeek reasoning model feature)', async () => {
+  it('emits reasoning_content (DeepSeek reasoning model feature)', { skip: !apiAvailable }, async () => {
     const data = await callLLM('say hello');
     const msg = data.choices[0].message;
-    // Reasoning models add reasoning_content for chain-of-thought
     expect(msg).toHaveProperty('reasoning_content');
     const hasReasoning = (msg.reasoning_content || '').length > 0;
     const hasReasoningTokens = (data.usage.completion_tokens_details?.reasoning_tokens || 0) > 0;
     expect(hasReasoning || hasReasoningTokens).toBe(true);
   });
 
-  it('finishes with "stop" reason when given enough tokens', async () => {
+  it('finishes with "stop" reason when given enough tokens', { skip: !apiAvailable }, async () => {
     const data = await callLLM('respond with only the word hello');
     expect(data.choices[0].finish_reason).toBe('stop');
   });
 
-  it('produces deterministic output at temperature=0', async () => {
-    // Run the same trivial prompt twice — should get the same answer
+  it('produces deterministic output at temperature=0', { skip: !apiAvailable }, async () => {
     const data1 = await callLLM('respond with only the word hello');
     const data2 = await callLLM('respond with only the word hello');
 
@@ -108,7 +123,7 @@ describe('OpenCode Go — deepseek-v4-flash', () => {
     expect(content2).toBe('hello');
   });
 
-  it('tracks reasoning tokens separately in usage', async () => {
+  it('tracks reasoning tokens separately in usage', { skip: !apiAvailable }, async () => {
     const data = await callLLM('say hello');
     const details = data.usage.completion_tokens_details;
     expect(details).toHaveProperty('reasoning_tokens');
