@@ -1,0 +1,55 @@
+{
+  "name": "bizforge",
+  "version": "1.0.0",
+  "description": "bizforge — modular business operations CLI. Company formation, legal docs, tax strategy, GDPR compliance, domain screening, App Store readiness, LLM advisor.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup.js",
+    "screen": "node scripts/screen-brand.js",
+    "verify": "node scripts/verify-company.js",
+    "domain": "node scripts/check-domain.js",
+    "contract": "node scripts/generate-contract.js",
+    "policy": "node scripts/generate-policy.js",
+    "strategy": "node scripts/tax-strategy.js",
+    "audit": "node scripts/audit-privacy.js",
+    "app-store": "node scripts/app-store-readiness.js",
+    "calendar": "node scripts/calendar.js",
+    "health": "node scripts/health-check.js",
+    "verify:setup": "node scripts/verify-setup.js",
+    "start": "node src/index.js",
+    "ask": "node scripts/ask.js",
+    "enhance": "node scripts/enhance.js",
+    "test:generate": "node scripts/test-generate.js",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration",
+    "test:contract": "vitest run test/contract",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@companieshouse/api-sdk-node": "^2.0.150",
+    "dotenv": "^16.4.5",
+    "whoiser": "^1.15.0"
+  },
+  "keywords": [
+    "automation",
+    "trademark",
+    "whois",
+    "companies-house",
+    "gdpr",
+    "app-store",
+    "agency",
+    "uk-business",
+    "llm",
+    "opencode",
+    "legal-tech",
+    "business-ops"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vitest": "^4.1.8"
+  }
+}
