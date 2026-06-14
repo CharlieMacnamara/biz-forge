@@ -10,11 +10,14 @@
     "verify": "node scripts/verify-company.js",
     "domain": "node scripts/check-domain.js",
     "contract": "node scripts/generate-contract.js",
+    "dashboard": "node scripts/dashboard.js",
     "policy": "node scripts/generate-policy.js",
     "strategy": "node scripts/tax-strategy.js",
+    "dividend": "node scripts/dividend.js",
     "audit": "node scripts/audit-privacy.js",
     "app-store": "node scripts/app-store-readiness.js",
     "calendar": "node scripts/calendar.js",
+    "readiness": "node scripts/readiness.js",
     "health": "node scripts/health-check.js",
     "verify:setup": "node scripts/verify-setup.js",
     "start": "node src/index.js",
@@ -50,6 +53,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.8",
     "vitest": "^4.1.8"
   }
 }

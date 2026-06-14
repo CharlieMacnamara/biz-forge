@@ -20,6 +20,9 @@ const commands = {
   audit:     { desc: 'GDPR/PECR compliance scan',                 script: '../scripts/audit-privacy.js' },
   'app-store':     { desc: 'App Store submission readiness',       script: '../scripts/app-store-readiness.js' },
   calendar:  { desc: 'Legal/tax deadline tracker',                script: '../scripts/calendar.js' },
+  dashboard: { desc: 'Financial dashboard (salary, CT, VAT, dividends, deadlines)', script: '../scripts/dashboard.js' },
+  dividend:  { desc: 'Generate HMRC-compliant dividend voucher',   script: '../scripts/dividend.js' },
+  readiness: { desc: 'Business readiness scored checklist',        script: '../scripts/readiness.js' },
   health:    { desc: 'API keys + domain expiry validation',        script: '../scripts/health-check.js' },
   'verify-setup': { desc: 'Bakes integration test of all systems',  script: '../scripts/verify-setup.js' },
   ask:       { desc: 'AI business advisor (LLM)',                 script: '../scripts/ask.js' },
@@ -50,6 +53,13 @@ if (!cmd || cmd === 'help') {
   logger.info('  npm run strategy -- 60000             # Tax plan at £60k revenue');
   logger.info('  npm run policy -- privacy             # Generate UK GDPR privacy policy');
   logger.info('  npm run audit -- https://yoursite.com # GDPR compliance check');
+  logger.info('');
+  logger.info('Finance & readiness:');
+  logger.info('  npm run dashboard -- 60000         # Financial overview (CT, VAT, dividends, deadlines)');
+  logger.info('  npm run dividend -- 5000            # Generate dividend voucher + board minutes');
+  logger.info('  npm run readiness                   # Business readiness scored checklist');
+  logger.info('  npm run calendar                    # Deadline tracker with 🔴🟡🟢 urgency');
+  logger.info('  npm run strategy -- compare 80k 120k# Compare two revenue scenarios');
   logger.info('');
   logger.info('LLM-powered:');
   logger.info('  npm run ask -- "Is flat rate VAT worth it at £80k?"');
